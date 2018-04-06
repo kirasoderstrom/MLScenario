@@ -25,7 +25,7 @@ ZcriteriaTrain <-ifelse(grepl("Z", train[,65]), "Z", "0")
 
 trainYy <-data.frame(X = XcriteriaTrain, Y = YcriteriaTrain, W = WcriteriaTrain, Z = ZcriteriaTrain)
 
-XcriteriaTest <-ifelse(grepl("X", test[,65]), "X", "0") #binary 1 if it has the value
+XcriteriaTest <-ifelse(grepl("X", test[,65]), "X", "0")
 YcriteriaTest <-ifelse(grepl("Y", test[,65]), "Y", "0")
 WcriteriaTest <-ifelse(grepl("W", test[,65]), "W", "0")
 ZcriteriaTest <-ifelse(grepl("Z", test[,65]), "Z", "0")
@@ -44,11 +44,12 @@ testPCAS<-predict(train.pca, newdata=testX)
 summary(train.pca)
 plot(train.pca)
 
-#14 covered a good amount of the cumulative proprotion. I would like to automatically set the weights based on some evaulation criteria so this part is automatic 
+#14 covered a good amount based off of the cumulative proprotion of variance
+#I would like to automatically set the weights based on some evaulation criteria so this part is automatic 
 featureSetTrain<-trainPCAS[,1:14] 
 featureSetTest<-testPCAS[,1:14]
 
-install.packages("e1071")
+install.packages("e1071") #svm package
 library(e1071)
 
 #Creating separate SVM models for each success criteria. Either grouping them all together or separating them out to combine later 
@@ -66,7 +67,7 @@ model_svm_W <- svm(Y ~ ., trainWv)
 model_svm_Z <- svm(Y ~ ., trainZv)
 
 #Use the predictions on the data
-pred <- predict(model_svm, featureSetTest) #overall result without breakind independent classifiers out
+pred <- predict(model_svm, featureSetTest) #overall result without breaking independent classifiers out
 predx <- predict(model_svm_X, featureSetTest)
 predy <- predict(model_svm_Y, featureSetTest)
 predw <- predict(model_svm_W, featureSetTest)
