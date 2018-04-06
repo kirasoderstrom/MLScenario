@@ -100,4 +100,4 @@ for(i in 1:(dim(predictionYy)[1])){
   vec[i]<-sum(predictionYy[i,1:4]==testYy[i,1:4])
 }
 
-vec <- sort(vec,decreasing = TRUE) #view the amount right per guess 
+vec <- sort(vec,decreasing = TRUE) #view quantity right out of 4. Binary selection toggle to be present or absent on each classification. 
