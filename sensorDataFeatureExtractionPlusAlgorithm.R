@@ -77,7 +77,6 @@ predz <- predict(model_svm_Z, featureSetTest)
 RESULTS <-data.frame(test = pred, testY)
 sum(RESULTS[,1]==RESULTS[,2])
 
-
 RESULTSX <-data.frame(test = predx)
 RESULTSY <-data.frame(test = predy)
 RESULTSW <-data.frame(test = predw)
@@ -93,11 +92,11 @@ totalBooleanValues<-dim(predictionYy)[1]*dim(predictionYy)[2]
 #percent success
 totalBooleanCorrect/totalBooleanValues*100 #Without setting this should be about 83%
 
-vec <- vector()
 
+#view the combination quantity right out of 4 total classifers. Keeping in mind the binary selection toggle to be present or absent on each classification. 
+vec <- vector()
 i<-1
 for(i in 1:(dim(predictionYy)[1])){
   vec[i]<-sum(predictionYy[i,1:4]==testYy[i,1:4])
 }
-
-vec <- sort(vec,decreasing = TRUE) #view quantity right out of 4. Binary selection toggle to be present or absent on each classification. 
+vec <- sort(vec,decreasing = TRUE)
