@@ -109,3 +109,13 @@ for(i in 1:(dim(predictionYy)[1])){
   vec[i]<-sum(predictionYy[i,1:4]==testYy[i,1:4])
 }
 vec <- sort(vec,decreasing = TRUE)
+
+#confusion matrices printout per variable if broken up by classifer
+conf_matrix_x <- table(precitcion = predictionYy[,1], actual = testYy[,1])
+conf_matrix_y <- table(precitcion = predictionYy[,2], actual = testYy[,2])
+conf_matrix_w <- table(precitcion = predictionYy[,3], actual = testYy[,3])
+conf_matrix_z <- table(precitcion = predictionYy[,4], actual = testYy[,4])
+print(conf_matrix_x)
+print(conf_matrix_y)
+print(conf_matrix_w)
+print(conf_matrix_z)
