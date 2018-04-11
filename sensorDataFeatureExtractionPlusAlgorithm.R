@@ -38,16 +38,16 @@ predictionYy <-data.frame(X = XcriteriaTrain, Y = YcriteriaTrain, W = WcriteriaT
 train.pca <- prcomp(trainX, center = TRUE, scale. = TRUE)  
 trainPCAS<-train.pca$x
 
-#train test PCAs based off of training algorithm 
+#predict test PCAs based off of training pca algorithm 
 testPCAS<-predict(train.pca, newdata=testX)
 
 summary(train.pca)
 plot(train.pca)
 
-#14 covered a good amount based off of the cumulative proprotion of variance
+#15 covered a good amount based off of the cumulative proprotion of variance
 #I would like to automatically set the weights based on some evaulation criteria so this part is automatic 
-featureSetTrain<-trainPCAS[,1:14] 
-featureSetTest<-testPCAS[,1:14]
+featureSetTrain<-trainPCAS[,1:15] 
+featureSetTest<-testPCAS[,1:15]
 
 install.packages("e1071") #svm package
 library(e1071)
@@ -59,8 +59,13 @@ trainYv <- data.frame(Y = YcriteriaTrain, featureSetTrain)
 trainWv <- data.frame(Y = WcriteriaTrain, featureSetTrain) 
 trainZv <- data.frame(Y = ZcriteriaTrain, featureSetTrain) 
 
+#Identify tuning optimized metrics for overarching model
+#use the obj$
+obj <- tune.svm(Y ~ ., data = trainAll,   kernel = "radial")
+obj$best.model
+
 #Training model
-model_svm <- svm(Y ~ ., trainAll)
+model_svm <- svm(Y ~ ., trainAll, scale = TRUE, kernel="radial", gamma=.066666666, cost = 1) # metrics based on tuning results
 model_svm_X <- svm(Y ~ ., trainXv)
 model_svm_Y <- svm(Y ~ ., trainYv)
 model_svm_W <- svm(Y ~ ., trainWv)
@@ -83,6 +88,10 @@ RESULTSY <-data.frame(test = predy)
 RESULTSW <-data.frame(test = predw)
 RESULTSZ <-data.frame(test = predz)
 
+#confusion matrix printout
+conf_matrix <- table(precitcion = pred, actual = testY)
+print(conf_matrix)
+
 #prediction set to compare to test set 
 predictionYy <-data.frame(X = RESULTSX, Y = RESULTSY, W = RESULTSW, Z = RESULTSZ)
 
@@ -92,7 +101,6 @@ totalBooleanCorrect<-sum(predictionYy[,1:4]==testYy[,1:4])
 totalBooleanValues<-dim(predictionYy)[1]*dim(predictionYy)[2]
 #percent success
 totalBooleanCorrect/totalBooleanValues*100 #Without setting this should be about 83%
-
 
 #view the combination quantity right out of 4 total classifers. Keeping in mind the binary selection toggle to be present or absent on each classification. 
 vec <- vector()
